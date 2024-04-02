@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":"ture","style":null},"fold":{"enable":"ture","height":500},"bookmark":{"enable":"ture","color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="分水岭算法理解与MATLAB实例分析​		如下图所示：  ​		苹果与苹果之间均有粘连，如果使用大津法做图像分割，则会将粘连的多个苹果分割为一个。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分水岭算法理解与MATLAB实例分析">
+<meta property="og:url" content="http://example.com/2024/04/02/%E5%88%86%E6%B0%B4%E5%B2%AD%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Lei He">
+<meta property="og:description" content="分水岭算法理解与MATLAB实例分析​		如下图所示：  ​		苹果与苹果之间均有粘连，如果使用大津法做图像分割，则会将粘连的多个苹果分割为一个。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/2Sm3HV5cCuZaULR.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/woGaUVF4OA7IMl3.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/h18OMYafJTnIRpL.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/y9oJvRPcKzVQYB4.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/eCN2OW9I7uVpQMw.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/bncSjZOzKvWJofp.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/4OJSmreQ3i2pHZF.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/daSVjqMWz3xth1Z.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/ZyX9bJ3mrz1cpQM.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/EnmaYyS1dsFv72T.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/L9v2A4pcOfhn8Yd.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/Y65h3kzgpVJHGEA.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/lM2jyanEop8xbsu.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/KOevXUFqPixh4A1.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/8kpt6uXgdMneF2x.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/waQ6eYPlKZUmr7i.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/z6EW5tIcNO2jYqv.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/MsvXVOElaij9oUF.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/04/02/xgqdJfN7isuP94R.jpg">
+<meta property="article:published_time" content="2024-04-02T05:15:06.000Z">
+<meta property="article:modified_time" content="2024-04-02T07:16:39.667Z">
+<meta property="article:author" content="Lei He">
+<meta property="article:tag" content="MATLAB">
+<meta property="article:tag" content="分水岭分割算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/04/02/2Sm3HV5cCuZaULR.jpg">
+
+
+<link rel="canonical" href="http://example.com/2024/04/02/%E5%88%86%E6%B0%B4%E5%B2%AD%E7%AE%97%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/02/%E5%88%86%E6%B0%B4%E5%B2%AD%E7%AE%97%E6%B3%95/","path":"2024/04/02/分水岭算法/","title":"分水岭算法理解与MATLAB实例分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>分水岭算法理解与MATLAB实例分析 | Lei He</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Lei He</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%B0%B4%E5%B2%AD%E7%AE%97%E6%B3%95%E7%90%86%E8%A7%A3%E4%B8%8EMATLAB%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">分水岭算法理解与MATLAB实例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B0%B4%E5%9D%9D%E7%9A%84%E6%9E%84%E5%BB%BA"><span class="nav-number">1.1.</span> <span class="nav-text">水坝的构建</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%B0%B4%E5%B2%AD%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">分水岭算法实现步骤：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%B0%B4%E5%B2%AD%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.</span> <span class="nav-text">分水岭算法的实现</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lei He"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Lei He</p>
+  <div class="site-description" itemprop="description">人生到处知何似，应似飞鸿踏雪泥！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/auststk/auststk.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;auststk&#x2F;auststk.github.io" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:helei_jxzl@126.com" title="E-Mail → mailto:helei_jxzl@126.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/02/%E5%88%86%E6%B0%B4%E5%B2%AD%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lei He">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lei He">
+      <meta itemprop="description" content="人生到处知何似，应似飞鸿踏雪泥！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="分水岭算法理解与MATLAB实例分析 | Lei He">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          分水岭算法理解与MATLAB实例分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-04-02 13:15:06 / 修改时间：15:16:39" itemprop="dateCreated datePublished" datetime="2024-04-02T13:15:06+08:00">2024-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/" itemprop="url" rel="index"><span itemprop="name">MATLAB</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/%E5%88%86%E6%B0%B4%E5%B2%AD%E5%88%86%E5%89%B2%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">分水岭分割算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="分水岭算法理解与MATLAB实例分析"><a href="#分水岭算法理解与MATLAB实例分析" class="headerlink" title="分水岭算法理解与MATLAB实例分析"></a>分水岭算法理解与MATLAB实例分析</h3><p>​		如下图所示：</p>
+<p><img src="https://s2.loli.net/2024/04/02/2Sm3HV5cCuZaULR.jpg" alt="Snipaste_2020-06-14_14-55-44.jpg"></p>
+<p>​		苹果与苹果之间均有粘连，如果使用大津法做图像分割，则会将粘连的多个苹果分割为一个。</p>
+<span id="more"></span>
+
+<hr>
+<p>​		分水岭算法将图像看作一个拓扑地形图，其中灰度值被认为是地形高度值。高灰度值对应着山峰，低灰度值对应着山谷。</p>
+<p>​		如下图所示（原图像）：</p>
+<p><img src="https://s2.loli.net/2024/04/02/woGaUVF4OA7IMl3.jpg" alt="Snipaste_2020-06-14_14-53-08.jpg"></p>
+<p>​		将原图像进行处理转化为地形俯视图：</p>
+<p><img src="https://s2.loli.net/2024/04/02/h18OMYafJTnIRpL.jpg" alt="Snipaste_2020-06-14_14-54-20.jpg"></p>
+<p>​		地形图三维视图：</p>
+<p><img src="https://s2.loli.net/2024/04/02/y9oJvRPcKzVQYB4.jpg" alt="Snipaste_2020-06-14_14-54-36.jpg"></p>
+<p>​		将水从任一处留下来，它会朝地势较低的地方流动，直到某一局部低洼处才停下来。这个低洼处被称为吸水盆地。最终所有的水都会聚集在不同的吸水盆地。</p>
+<p>​		吸水盆地之间的山脊被称为分水岭。</p>
+<p>​		水从分水岭留下时，它朝不同吸水盆地流去的可能性相同。</p>
+<pre><code>- 最小值点：水最终汇集的地方；
+- 盆地边缘点：水会等概率的流向任何盆地；
+- 盆地其他点：水会聚集到局部最小点。
+</code></pre>
+<p><img src="https://s2.loli.net/2024/04/02/eCN2OW9I7uVpQMw.jpg" alt="Snipaste_2020-06-14_15-00-50.jpg"></p>
+<p>​	   上图中红色的点可以视作注水口。</p>
+<p>​		假设我们在盆地的最小值点打一个洞，然后往盆地里面注水，并且阻止两个盆地的水汇集，并在两个盆地的水汇集的时刻，在交界线的边缘上（也即分水岭线），建立一个水坝，来阻止两个盆地的水汇集成一片水域。</p>
+<p>​		这样图像就被分成2个像素集，一个是注水盆地像素集，一个是分水岭线像素集。</p>
+<p>​		对应到图像分割，就是要在灰度图像中找到不同的吸水盆地和分水岭。</p>
+<p>​		不同的吸水盆地和分水岭组成的区域即为我们要分割的目标。</p>
+<p><img src="https://s2.loli.net/2024/04/02/bncSjZOzKvWJofp.jpg" alt="Snipaste_2020-06-14_15-07-59.jpg"></p>
+<p>​		逐渐漫水过程示意图：</p>
+<p><img src="https://s2.loli.net/2024/04/02/4OJSmreQ3i2pHZF.jpg" alt="Snipaste_2020-06-14_15-10-06.jpg"></p>
+<p><img src="https://s2.loli.net/2024/04/02/daSVjqMWz3xth1Z.jpg" alt="Snipaste_2020-06-14_15-10-22.jpg"></p>
+<p><img src="https://s2.loli.net/2024/04/02/ZyX9bJ3mrz1cpQM.jpg" alt="Snipaste_2020-06-14_15-10-36.jpg"></p>
+<p><img src="https://s2.loli.net/2024/04/02/EnmaYyS1dsFv72T.jpg" alt="Snipaste_2020-06-14_15-10-55.jpg"></p>
+<p>​		最终我们想要的结果：</p>
+<p><img src="https://s2.loli.net/2024/04/02/L9v2A4pcOfhn8Yd.jpg" alt="Snipaste_2020-06-14_15-11-15.jpg"></p>
+<h4 id="水坝的构建"><a href="#水坝的构建" class="headerlink" title="水坝的构建"></a>水坝的构建</h4><ul>
+<li>在实际操作中，水位的上升常利用灰度0~255的分层处理来实现，当处理到第N层时，灰度小于N的像素就会被淹没。</li>
+<li>图中a显示了两个相邻聚水盆，其中颜色越深的区域海拔越低。</li>
+<li>当水位逐渐上升到第N-1阶段时，黑色区域首先被淹没。</li>
+<li>借助膨胀的方法，在水域之间适当的位置构建堤坝防止水域的连通。</li>
+</ul>
+<p><img src="https://s2.loli.net/2024/04/02/Y65h3kzgpVJHGEA.jpg" alt="Snipaste_2020-06-14_15-16-06.jpg"></p>
+<p><img src="https://s2.loli.net/2024/04/02/lM2jyanEop8xbsu.jpg" alt="Snipaste_2020-06-14_15-18-50.jpg"></p>
+<h3 id="分水岭算法实现步骤："><a href="#分水岭算法实现步骤：" class="headerlink" title="分水岭算法实现步骤："></a>分水岭算法实现步骤：</h3><p><img src="https://s2.loli.net/2024/04/02/KOevXUFqPixh4A1.jpg" alt="Snipaste_2020-06-14_15-19-56.jpg"></p>
+<h4 id="分水岭算法的实现"><a href="#分水岭算法的实现" class="headerlink" title="分水岭算法的实现"></a>分水岭算法的实现</h4><p>​		在MATLAB中，函数watershed（）即为分水岭函数。L &#x3D; watershed（A），L是一个标记矩阵，标记分水岭算法分割出的各“分水岭”区域。</p>
+<p><img src="https://s2.loli.net/2024/04/02/8kpt6uXgdMneF2x.jpg" alt="Snipaste_2020-06-14_15-22-11.jpg"></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rgb = imread(<span class="string">&#x27;pears.png&#x27;</span>);</span><br><span class="line">I = rgb2gray(rgb);</span><br><span class="line">subplot(<span class="number">121</span>),imshow(rgb);</span><br><span class="line">subplot(<span class="number">122</span>),imshow(I);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/04/02/waQ6eYPlKZUmr7i.jpg" alt="Snipaste_2020-06-14_15-28-13.jpg"></p>
+<p>​		为了更加突出边缘信息，针对梯度图像进行处理：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%求灰度图像梯度图像</span></span><br><span class="line">hy = fspecial(<span class="string">&#x27;sobel&#x27;</span>);hx = hy&#x27;;    <span class="comment">%sobel水平边缘增强滤波器，用于边缘提取</span></span><br><span class="line">Iy = imfilter(double(I),hy,<span class="string">&#x27;replicate&#x27;</span>);    <span class="comment">%Iy方向梯度分量</span></span><br><span class="line">Ix = imfilter(double(I),hx,<span class="string">&#x27;replicate&#x27;</span>);    <span class="comment">%Ix方向梯度分量</span></span><br><span class="line">gradmag = <span class="built_in">sqrt</span>(Ix.^<span class="number">2</span> + Iy.^<span class="number">2</span>);</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>),imshow(gradmag,[]),title(<span class="string">&#x27;梯度幅值图像&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/04/02/z6EW5tIcNO2jYqv.jpg" alt="Snipaste_2020-06-14_15-38-54.jpg"></p>
+<p>​		接下来使用梯度幅值图像做分水岭：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%使用分水岭函数分割图像</span></span><br><span class="line">L = watershed(gradmag);</span><br><span class="line">Lrgb = label2rgb(L);</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">3</span>),imshow(Lrgb),title(<span class="string">&#x27;梯度幅值图像做分水岭&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://s2.loli.net/2024/04/02/MsvXVOElaij9oUF.jpg" alt="Snipaste_2020-06-14_15-43-53.jpg"></p>
+<p>​		结果图像过分割太严重（寻找到的局部极小值太多），接下来需要对其进行改进，首先标注，然后分割，即把较多的极小值点进行合并。</p>
+<p>​		事前标记(Mark)目标部分区域（运用形态学中的开闭运算），在这个区域的水淹没过程中，水平面都是从定义的高度开始的，这样可以避免一些很小的噪声极值区域的分割。</p>
+<p><img src="https://s2.loli.net/2024/04/02/xgqdJfN7isuP94R.jpg" alt="Snipaste_2020-06-14_15-52-56.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Lei He 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MATLAB/" rel="tag"># MATLAB</a>
+              <a href="/tags/%E5%88%86%E6%B0%B4%E5%B2%AD%E5%88%86%E5%89%B2%E7%AE%97%E6%B3%95/" rel="tag"># 分水岭分割算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/01/2024-04-01-%E5%8D%9A%E5%AE%A2%E4%B8%BB%E8%A6%81%E5%86%85%E5%AE%B9%E7%AE%80%E8%A6%81/" rel="prev" title="博客主要内容简要">
+                  <i class="fa fa-angle-left"></i> 博客主要内容简要
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/02/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E5%88%86%E9%80%89%E5%85%B3%E9%94%AE%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/" rel="next" title="煤矸双能X射线分选关键核心技术总结">
+                  煤矸双能X射线分选关键核心技术总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Lei He</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">1k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+
+
+
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("4/01/2024 10:00:00"); //修改为你的网站开始运行的时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒.";
+    }
+setInterval("createtime()",250);
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
