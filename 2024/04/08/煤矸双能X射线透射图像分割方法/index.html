@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":"ture","style":null},"fold":{"enable":"ture","height":500},"bookmark":{"enable":"ture","color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="​	煤矸双能X射线透射图像经过去噪校正后一般背景比较单一均匀，采用阈值法即可有效分割出前景目标。待分割图像如下图所示：  ​	上图成像特点体现为明暗不均，类似于可见光成像的光照不均匀。煤密度小成像亮，贴近背景；矸石密度大成像暗，较好分割。煤矸厚度越大成像也越暗，因此阈值的选择尤为关键。既要保障分割全部目标，又要保障分割出全部的目标区域。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="煤矸双能X射线透射图像分割方法">
+<meta property="og:url" content="http://example.com/2024/04/08/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Lei He">
+<meta property="og:description" content="​	煤矸双能X射线透射图像经过去噪校正后一般背景比较单一均匀，采用阈值法即可有效分割出前景目标。待分割图像如下图所示：  ​	上图成像特点体现为明暗不均，类似于可见光成像的光照不均匀。煤密度小成像亮，贴近背景；矸石密度大成像暗，较好分割。煤矸厚度越大成像也越暗，因此阈值的选择尤为关键。既要保障分割全部目标，又要保障分割出全部的目标区域。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/04/08/LmzOHU7A4JwisCu.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/08/1OnlTk4qACxWU3c.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/08/yElOsxvfD1ghRVH.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/08/luEKXqsLtyFpWmc.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/08/U1D3v4nX6ds8gfz.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/08/3VsRzAu6fDjaOGe.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/08/B9cLwhPGtdMJrNZ.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/08/qr8s3D9a6pJbCPQ.png">
+<meta property="article:published_time" content="2024-04-08T11:29:55.000Z">
+<meta property="article:modified_time" content="2024-04-08T13:18:34.322Z">
+<meta property="article:author" content="Lei He">
+<meta property="article:tag" content="MATLAB">
+<meta property="article:tag" content="图像分割">
+<meta property="article:tag" content="双能X射线">
+<meta property="article:tag" content="煤矸石">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/04/08/LmzOHU7A4JwisCu.png">
+
+
+<link rel="canonical" href="http://example.com/2024/04/08/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/08/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95/","path":"2024/04/08/煤矸双能X射线透射图像分割方法/","title":"煤矸双能X射线透射图像分割方法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>煤矸双能X射线透射图像分割方法 | Lei He</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Lei He</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%9F%BA%E4%BA%8E%E7%A9%BA%E7%9A%AE%E5%B8%A6%E5%9B%BE%E5%83%8F%E8%83%8C%E6%99%AF%E5%8C%BA%E5%9F%9F%E6%9C%80%E5%B0%8F%E5%80%BC%E7%9A%84%E7%9B%AE%E6%A0%87%E5%88%86%E5%89%B2"><span class="nav-number">1.</span> <span class="nav-text">分割方法一：基于空皮带图像背景区域最小值的目标分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9AOTSU%E9%98%88%E5%80%BC%E5%88%86%E5%89%B2%EF%BC%88%E5%A4%A7%E6%B4%A5%E6%B3%95%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">分割方法二：OTSU阈值分割（大津法）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E8%BF%AD%E4%BB%A3%E9%98%88%E5%80%BC%E5%88%86%E5%89%B2"><span class="nav-number">3.</span> <span class="nav-text">分割方法三：迭代阈值分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95%E5%9B%9B%EF%BC%9A%E5%88%86%E5%9D%97OTSU%E9%98%88%E5%80%BC%E5%88%86%E5%89%B2"><span class="nav-number">4.</span> <span class="nav-text">分割方法四：分块OTSU阈值分割</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lei He"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Lei He</p>
+  <div class="site-description" itemprop="description">人生到处知何似，应似飞鸿踏雪泥！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/auststk/auststk.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;auststk&#x2F;auststk.github.io" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:helei_jxzl@126.com" title="E-Mail → mailto:helei_jxzl@126.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/08/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lei He">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lei He">
+      <meta itemprop="description" content="人生到处知何似，应似飞鸿踏雪泥！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="煤矸双能X射线透射图像分割方法 | Lei He">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          煤矸双能X射线透射图像分割方法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-04-08 19:29:55 / 修改时间：21:18:34" itemprop="dateCreated datePublished" datetime="2024-04-08T19:29:55+08:00">2024-04-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/" itemprop="url" rel="index"><span itemprop="name">MATLAB</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" itemprop="url" rel="index"><span itemprop="name">图像分割</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>​	煤矸双能X射线透射图像经过去噪校正后一般背景比较单一均匀，采用阈值法即可有效分割出前景目标。待分割图像如下图所示：</p>
+<p><img src="https://s2.loli.net/2024/04/08/LmzOHU7A4JwisCu.png" alt="Snipaste_2024-04-08_20-11-34.png"></p>
+<p>​	上图成像特点体现为明暗不均，类似于可见光成像的光照不均匀。煤密度小成像亮，贴近背景；矸石密度大成像暗，较好分割。煤矸厚度越大成像也越暗，因此阈值的选择尤为关键。既要保障分割全部目标，又要保障分割出全部的目标区域。</p>
+<span id="more"></span>
+
+<h3 id="分割方法一：基于空皮带图像背景区域最小值的目标分割"><a href="#分割方法一：基于空皮带图像背景区域最小值的目标分割" class="headerlink" title="分割方法一：基于空皮带图像背景区域最小值的目标分割"></a>分割方法一：基于空皮带图像背景区域最小值的目标分割</h3><p>​	基于空皮带图像背景区域最小值的目标分割，代码如下：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">clc </span><br><span class="line">clear all;</span><br><span class="line">close all;</span><br><span class="line"><span class="comment">%读取高低能图像</span></span><br><span class="line">I = imread(<span class="string">&#x27;C:\Users\雷子\Desktop\煤矸双能X射线透射图像分割方法\2020_8_20_15_52_11_144_H.bmp&#x27;</span>);  </span><br><span class="line">I=I(:,:,<span class="number">1</span>); <span class="comment">%空皮带背景区域</span></span><br><span class="line">I_k= I(<span class="number">800</span>:<span class="number">1000</span>,<span class="number">500</span>:<span class="number">600</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">1</span>),subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>),imshow(I);</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>),imshow(I_k);</span><br><span class="line"></span><br><span class="line"><span class="comment">%采用中值滤波去噪</span></span><br><span class="line">I= medfilt2(I,[<span class="number">3</span>,<span class="number">3</span>]); </span><br><span class="line"></span><br><span class="line"><span class="comment">%计算分割阈值</span></span><br><span class="line">min_I_k = <span class="built_in">min</span>(<span class="built_in">min</span>(I_k)); <span class="comment">% min_I_k=188</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%基于最小空皮带灰度值的图像分割</span></span><br><span class="line">[m,n] = <span class="built_in">size</span>(I);</span><br><span class="line">img_I = I;</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span> : m</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span> : n</span><br><span class="line">        <span class="keyword">if</span> img_I (<span class="built_in">i</span>,<span class="built_in">j</span>) &gt; min_I_k </span><br><span class="line">            img_I (<span class="built_in">i</span>,<span class="built_in">j</span>) = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">             img_I (<span class="built_in">i</span>,<span class="built_in">j</span>) = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%删除小面积区域</span></span><br><span class="line">img_I_d= bwareaopen(img_I,<span class="number">10</span>);</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>),subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>),imshow(img_I,[<span class="number">0</span>,<span class="number">1</span>]);</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>);imshow(img_I_d);</span><br></pre></td></tr></table></figure>
+
+<p>​	分割后的图像如下图所示：</p>
+<p><img src="https://s2.loli.net/2024/04/08/1OnlTk4qACxWU3c.png" alt="Snipaste_2024-04-08_20-32-09.png"></p>
+<p>​	从分割后的图像中可以看到，采用基于空皮带图像背景区域最小值的目标分割方法可以分割出全部的目标，但是目标存在有粘连区域。</p>
+<h3 id="分割方法二：OTSU阈值分割（大津法）"><a href="#分割方法二：OTSU阈值分割（大津法）" class="headerlink" title="分割方法二：OTSU阈值分割（大津法）"></a>分割方法二：OTSU阈值分割（大津法）</h3><p>​	采用大津法分割图像，又称OTSU阈值分割法，通过MATLAB中graythresh获取阈值，然后基于阈值thersh_H分割图像。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">clc </span><br><span class="line">clear all;</span><br><span class="line">close all;</span><br><span class="line"><span class="comment">%读取高低能图像</span></span><br><span class="line">I = imread(<span class="string">&#x27;C:\Users\雷子\Desktop\煤矸双能X射线透射图像分割方法\2020_8_20_15_52_11_144_H.bmp&#x27;</span>);  </span><br><span class="line"></span><br><span class="line">I=I(:,:,<span class="number">1</span>);</span><br><span class="line"><span class="comment">%计算二值化图像</span></span><br><span class="line">thersh_H = graythresh(I); <span class="comment">%最大化类间方差 OTSU阈值分割 大津法</span></span><br><span class="line">High_im_bw = im2bw(I,thersh_H);<span class="comment">%thersh_H=0.4510，归一化后的阈值</span></span><br><span class="line"><span class="comment">%二值化取反</span></span><br><span class="line">High_im_bw = ~High_im_bw;</span><br><span class="line">High_im_bw = bwareaopen(High_im_bw,<span class="number">50</span>);</span><br><span class="line">imshow(High_im_bw);</span><br><span class="line"></span><br><span class="line"><span class="comment">%删除小面积区域</span></span><br><span class="line">img_I_d= bwareaopen(High_im_bw,<span class="number">10</span>);</span><br><span class="line">imshow(img_I_d);</span><br></pre></td></tr></table></figure>
+
+<p>​	分割后的图像如下图所示：</p>
+<p><img src="https://s2.loli.net/2024/04/08/yElOsxvfD1ghRVH.png" alt="Snipaste_2024-04-08_20-37-01.png"></p>
+<p>​	从分割后的图中可以看到，部分小目标由于成像接近背景而未被有效分割。</p>
+<h3 id="分割方法三：迭代阈值分割"><a href="#分割方法三：迭代阈值分割" class="headerlink" title="分割方法三：迭代阈值分割"></a>分割方法三：迭代阈值分割</h3><p>​	迭代阈值分割通过迭代方式计算最佳阈值，具有一定的自适应性，迭代阈值分割主要步骤如下：</p>
+<p>​	①设定初始参数<em>T</em>0，初始阈值<em>T</em>1；</p>
+<p>​	②使用阈值<em>T</em>1分割图像，<em>G</em>1部分像素值低于<em>T</em>1，<em>G</em>2部分像素值高于<em>T</em>1；</p>
+<p>​	③计算<em>G</em>1和<em>G</em>2各自像素平均值<em>m</em>1和<em>m</em>2，更新阈值<em>T</em>2&#x3D;(<em>m</em>1+<em>m</em>2)&#x2F;2；</p>
+<p>​	④若|<em>T</em>1-<em>T</em>2|&lt;<em>T</em>0，则<em>T</em>2为最优阈值，否则令<em>T</em>1&#x3D;<em>T</em>2，重复②~④。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">clc </span><br><span class="line">clear all;</span><br><span class="line">close all;</span><br><span class="line"><span class="comment">%读取高低能图像</span></span><br><span class="line">I = imread(<span class="string">&#x27;C:\Users\雷子\Desktop\煤矸双能X射线透射图像分割方法\2020_8_20_15_52_11_144_H.bmp&#x27;</span>);  </span><br><span class="line">I=im2double(I);</span><br><span class="line"><span class="comment">% 第一步:设置参数T0,并选择一个初始的估计阈值T1(取图像I像素值的最小值和最大值的平均值)</span></span><br><span class="line">T0=<span class="number">0.01</span>;</span><br><span class="line">T1=(<span class="built_in">min</span>(I(:))+<span class="built_in">max</span>(I(:)))/<span class="number">2</span>;</span><br><span class="line"><span class="comment">% 第二步：用阈值T1分割图像.将图像分成两部分:r1由灰度值大于T1的像素组成,r2是由灰度小于或等于T1的像素组成</span></span><br><span class="line">r1=<span class="built_in">find</span>(I&gt;T1);<span class="comment">% find函数返回素有非零元素的位置</span></span><br><span class="line">r2=<span class="built_in">find</span>(I&lt;=T1);</span><br><span class="line"><span class="comment">% 第三步:计算r1和r2中所有像素的平均灰度值h1和h2以及新的阈值T2=(h1+h2)/2</span></span><br><span class="line">T2=(<span class="built_in">mean</span>(I(r1))+<span class="built_in">mean</span>(I(r2)))/<span class="number">2</span>;</span><br><span class="line"><span class="comment">% 第四步:若|T2-T1|&lt;T0,则推出T2即为最优阈值;否则,将T2赋值给T1,并重复步骤2-4直到获取最优阈值</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">abs</span>(T2-T1)&lt;T0</span><br><span class="line">    J=imbinarize(I,T2);  <span class="comment">% 使用imbinarize函数进行图像分割</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">abs</span>(T2-T1)&gt;=T0</span><br><span class="line">        T1=T2;</span><br><span class="line">        r1=<span class="built_in">find</span>(I&gt;T1);</span><br><span class="line">        r2=<span class="built_in">find</span>(I&lt;=T1);</span><br><span class="line">        T2=(<span class="built_in">mean</span>(I(r1))+<span class="built_in">mean</span>(I(r2)))/<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    J=imbinarize(I,T2);  <span class="comment">% 使用imbinarize函数进行图像分割</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">J=~J;</span><br><span class="line">subplot(<span class="number">121</span>),imshow(I);</span><br><span class="line">title(<span class="string">&#x27;原始图像&#x27;</span>);</span><br><span class="line">subplot(<span class="number">122</span>),imshow(J);</span><br><span class="line">title(<span class="string">&#x27;迭代式阈值分割后的图像&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>​	分割结果如下如：</p>
+<p><img src="https://s2.loli.net/2024/04/08/luEKXqsLtyFpWmc.png" alt="Snipaste_2024-04-08_20-48-14.png"></p>
+<p>​	采用迭代阈值分割结果与采用OTSU阈值分割结果相当。</p>
+<h3 id="分割方法四：分块OTSU阈值分割"><a href="#分割方法四：分块OTSU阈值分割" class="headerlink" title="分割方法四：分块OTSU阈值分割"></a>分割方法四：分块OTSU阈值分割</h3><p>​	分块OTSU阈值分割通过将图像分割成若干块，对每一块计算类间最大方差分别选取阈值来削弱成像明暗不均匀造成的漏分割。分块后需要判断分块中只有背景的情况，排除对这种分块的处理。当图像中只有背景或只有煤矸时，灰度值比较接近，采用OTSU算出的“背景”和“前景”平均灰度差<em>Δm</em>会很小。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">clc </span><br><span class="line">clear all;</span><br><span class="line">close all;</span><br><span class="line"><span class="comment">%读取高低能图像</span></span><br><span class="line">I = imread(<span class="string">&#x27;C:\Users\雷子\Desktop\煤矸双能X射线透射图像分割方法\2020_8_20_15_52_11_144_H.bmp&#x27;</span>);  </span><br><span class="line">I=I(:,:,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">rn = <span class="number">4</span>;cn = <span class="number">4</span>; <span class="comment">%定义分块区域 4X4即分成16块</span></span><br><span class="line">[R , C] = <span class="built_in">size</span>(I);<span class="comment">%分别返回行和列数</span></span><br><span class="line">rblk = R/rn;cblk = C/cn;<span class="comment">%小块的行数和列数</span></span><br><span class="line">x = <span class="number">0</span>:cblk:C+<span class="number">1</span>;</span><br><span class="line">y = <span class="number">0</span>:rblk:R+<span class="number">1</span>;</span><br><span class="line">M = <span class="built_in">meshgrid</span>(x,y); <span class="comment">%产生网格</span></span><br><span class="line">N = <span class="built_in">meshgrid</span>(y,x);  <span class="comment">%产生网格</span></span><br><span class="line"><span class="built_in">figure</span>,imshow(I),<span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x,N,<span class="string">&#x27;g&#x27;</span>); <span class="comment">%画出水平横线</span></span><br><span class="line"><span class="built_in">plot</span>(M,y,<span class="string">&#x27;g&#x27;</span>); <span class="comment">%画出垂直竖线</span></span><br><span class="line"></span><br><span class="line">T = <span class="built_in">zeros</span>(rn,cn);</span><br><span class="line">dif = <span class="built_in">zeros</span>(rn,cn);</span><br><span class="line">J = <span class="built_in">false</span>(R,C);<span class="comment">%初始化二值图</span></span><br><span class="line">X = uint8(<span class="built_in">zeros</span>(rblk,cblk));</span><br><span class="line"></span><br><span class="line"><span class="comment">%分块阈值，并判断类间灰度差以排除纯背景或纯物体的干扰</span></span><br><span class="line"><span class="keyword">for</span> r=<span class="number">1</span>:rn</span><br><span class="line">    <span class="keyword">for</span> c=<span class="number">1</span>:cn</span><br><span class="line">        r0=rblk*(r<span class="number">-1</span>)+<span class="number">1</span>;r1=rblk*r;</span><br><span class="line">        c0=cblk*(c<span class="number">-1</span>)+<span class="number">1</span>;c1=cblk*c;</span><br><span class="line">        X = I(r0:r1,c0:c1);</span><br><span class="line">        T(r,c) = graythresh(X);                             <span class="comment">%计算分割阈值</span></span><br><span class="line">        [h,~] = histcounts(X,<span class="number">0</span>:<span class="number">255</span>);</span><br><span class="line">        T_int =uint8(T(r,c)*<span class="number">255</span>);</span><br><span class="line">        dif(r,c) = graydiffer(h,T_int);                     <span class="comment">%计算类间灰度差的函数略</span></span><br><span class="line">        str = [<span class="string">&#x27;T=&#x27;</span>,num2str(T_int),<span class="string">&#x27; △m=&#x27;</span>,num2str(dif(r,c))];</span><br><span class="line">        text(c0+cblk/<span class="number">4</span>,r0+rblk/<span class="number">2</span>,str,<span class="string">&#x27;color&#x27;</span>,<span class="string">&#x27;black&#x27;</span>);<span class="comment">%显示信息</span></span><br><span class="line">        <span class="keyword">if</span> dif(r,c)&gt;<span class="number">30</span> <span class="comment">%这里设定m</span></span><br><span class="line">            J(r0:r1,c0:c1) = ~im2bw(X,T(r,c));</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">bw_F = bwareaopen(J,<span class="number">50</span>); <span class="comment">%删除小面积连通域区域</span></span><br><span class="line">bw_F  = J;</span><br><span class="line"><span class="built_in">figure</span>,imshow(bw_F); <span class="comment">%显示最终分割结果</span></span><br></pre></td></tr></table></figure>
+
+<p>​	注意！调用函数graythresh：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">%功能：计算一幅图像前景和背景类间平均灰度差</span><br><span class="line">%输入：直方图数据h,分割阈值T</span><br><span class="line">%输出：类间平均灰度差</span><br><span class="line">%作者：LEI HE</span><br><span class="line">%日期：2024/04/08</span><br><span class="line">function[differ] = graydiffer(h,T)</span><br><span class="line">    s1 = sum(h(1:T));</span><br><span class="line">    s2 = sum(h(T:255));</span><br><span class="line">    n1 = 1:T;</span><br><span class="line">    n2 = T:255;</span><br><span class="line">    u1 = double(n1)*h(1:T)&#x27; / s1; %背景灰度均值</span><br><span class="line">    u2 = double(n2)*h(T:255)&#x27; / s2; %前景灰度均值</span><br><span class="line">    differ = uint8(u2-u1);</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>​	分块图像如下图所示：</p>
+<p><img src="https://s2.loli.net/2024/04/08/U1D3v4nX6ds8gfz.png" alt="Snipaste_2024-04-08_20-59-00.png"></p>
+<p>​	分块OTSU阈值分割算法将图像分为四列，保证每一个块中都包含背景区域，在此基础上降低分块数量可提高计算效率。图中<em>T</em>为单个区域分块的最佳分割阈值，Δ<em>m</em>为此分块对应类间灰度差。设定类间灰度差Δ<em>m</em>为一个合适的阈值，如Δ<em>m</em>&#x3D;30，即只对Δ<em>m</em>&gt;30的分块进行阈值二值化处理，而Δ<em>m</em>&lt;30的分块全部像素点均置零。</p>
+<p>​	分割后的图像如下图所示：</p>
+<p><img src="https://s2.loli.net/2024/04/08/3VsRzAu6fDjaOGe.png" alt="Snipaste_2024-04-08_20-55-02.png"></p>
+<p>​	采用分块OTSU阈值分割，在保证分割全部目标的同时，不会引入大量的粘连。</p>
+<p>​	原图像的灰度直方图：</p>
+<p><img src="https://s2.loli.net/2024/04/08/B9cLwhPGtdMJrNZ.png" alt="Snipaste_2024-04-08_21-13-35.png"></p>
+<p>​	使用背景阈值分割将分布在150附近的灰度值划分到前景中，这是粘连的主要原因。采用背景阈值分割获得的区域边缘一定为目标X射线成像的真实边缘，而分块OTSU阈值分割会舍弃此部分边缘。X射线透射成像在不遇到物体时背景值不会降低，一但像素值低于背景像素值那么则说明有物体被穿透。但为了避免引入大量不必要的重叠粘连，选择分块OTSU阈值分割对图像进行二值化处理。</p>
+<p><img src="https://s2.loli.net/2024/04/08/qr8s3D9a6pJbCPQ.png" alt="1.png"></p>
+<p>​	本文源码对于博士论文第三章，第5节内容。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Lei He 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MATLAB/" rel="tag"># MATLAB</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" rel="tag"># 图像分割</a>
+              <a href="/tags/%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF/" rel="tag"># 双能X射线</a>
+              <a href="/tags/%E7%85%A4%E7%9F%B8%E7%9F%B3/" rel="tag"># 煤矸石</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/02/%E5%88%86%E6%B0%B4%E5%B2%AD%E7%AE%97%E6%B3%95/" rel="prev" title="分水岭算法理解与MATLAB实例分析">
+                  <i class="fa fa-angle-left"></i> 分水岭算法理解与MATLAB实例分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Lei He</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">6k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">5 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+
+
+
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("4/01/2024 10:00:00"); //修改为你的网站开始运行的时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒.";
+    }
+setInterval("createtime()",250);
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
