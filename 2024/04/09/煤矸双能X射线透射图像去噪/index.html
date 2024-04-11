@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":"ture","style":null},"fold":{"enable":"ture","height":500},"bookmark":{"enable":"ture","color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="X射线成像系统噪声可分为三种类型：本底噪声、随机噪声和孤立噪声。 分别采用均值滤波、中值滤波、自适应中值滤波和高斯滤波对图像进行去噪处理。均值滤波中   常用正方形滤波模板一般有3×3、5×5和7×7，使用均值滤波会将煤矸的成像边界变得模糊，原因是邻域内所有像素点在均值中所占的权值都是1&#x2F;9，采用均值滤波可有效去除图像中的高频噪声。中值滤波相对均值滤波能够保留图像的边缘细节，对某些随机噪">
+<meta property="og:type" content="article">
+<meta property="og:title" content="煤矸双能X射线透射图像去噪">
+<meta property="og:url" content="http://example.com/2024/04/09/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/index.html">
+<meta property="og:site_name" content="Lei He">
+<meta property="og:description" content="X射线成像系统噪声可分为三种类型：本底噪声、随机噪声和孤立噪声。 分别采用均值滤波、中值滤波、自适应中值滤波和高斯滤波对图像进行去噪处理。均值滤波中   常用正方形滤波模板一般有3×3、5×5和7×7，使用均值滤波会将煤矸的成像边界变得模糊，原因是邻域内所有像素点在均值中所占的权值都是1&#x2F;9，采用均值滤波可有效去除图像中的高频噪声。中值滤波相对均值滤波能够保留图像的边缘细节，对某些随机噪">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/OAlNvqRD8otQ6WM.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/C5g9jAUTNmMS8GR.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/mhKEJZvIxQHeXld.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/cuUMOxz3ptKHPNZ.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/IhbouaLOc2KlWRD.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/KYvd8ypukSjPTDB.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/kLAYOnjgZSTirJN.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/2emCGEaVzTnUjbK.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/AdryKj1NhefPsa8.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/f1W6LYaMS3uNOoV.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/HOrKgvVswPeJCzp.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/8L9WDb34df6Iyhg.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/XS8lBUud9bixQgJ.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/GKC5YO8Xr3J7dp6.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/11/gMzlQeyTbS5NoIF.png">
+<meta property="article:published_time" content="2024-04-09T01:53:13.000Z">
+<meta property="article:modified_time" content="2024-04-11T14:04:14.944Z">
+<meta property="article:author" content="Lei He">
+<meta property="article:tag" content="MATLAB">
+<meta property="article:tag" content="双能X射线">
+<meta property="article:tag" content="煤矸石">
+<meta property="article:tag" content="图像去噪">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/04/11/OAlNvqRD8otQ6WM.png">
+
+
+<link rel="canonical" href="http://example.com/2024/04/09/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/09/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/","path":"2024/04/09/煤矸双能X射线透射图像去噪/","title":"煤矸双能X射线透射图像去噪"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>煤矸双能X射线透射图像去噪 | Lei He</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Lei He</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2"><span class="nav-number">1.</span> <span class="nav-text">均值滤波</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2"><span class="nav-number">2.</span> <span class="nav-text">中值滤波</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">自适应中值滤波：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2"><span class="nav-number">4.</span> <span class="nav-text">高斯滤波</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lei He"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Lei He</p>
+  <div class="site-description" itemprop="description">人生到处知何似，应似飞鸿踏雪泥！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/auststk/auststk.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;auststk&#x2F;auststk.github.io" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:helei_jxzl@126.com" title="E-Mail → mailto:helei_jxzl@126.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/09/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lei He">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lei He">
+      <meta itemprop="description" content="人生到处知何似，应似飞鸿踏雪泥！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="煤矸双能X射线透射图像去噪 | Lei He">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          煤矸双能X射线透射图像去噪
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-09 09:53:13" itemprop="dateCreated datePublished" datetime="2024-04-09T09:53:13+08:00">2024-04-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-04-11 22:04:14" itemprop="dateModified" datetime="2024-04-11T22:04:14+08:00">2024-04-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/" itemprop="url" rel="index"><span itemprop="name">MATLAB</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/" itemprop="url" rel="index"><span itemprop="name">图像去噪</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>X射线成像系统噪声可分为三种类型：本底噪声、随机噪声和孤立噪声。</p>
+<p>分别采用均值滤波、中值滤波、自适应中值滤波和高斯滤波对图像进行去噪处理。均值滤波中   常用正方形滤波模板一般有3×3、5×5和7×7，使用均值滤波会将煤矸的成像边界变得模糊，原因是邻域内所有像素点在均值中所占的权值都是1&#x2F;9，采用均值滤波可有效去除图像中的高频噪声。中值滤波相对均值滤波能够保留图像的边缘细节，对某些随机噪声具有非常理想的降噪能力，并且可以有效的去处成像时的坏点。高斯滤波相对均值滤波对图像的模糊程度更小，能够保留整体细节。自适应中值滤波基于传统中值滤波改进，可去除强度较高的椒盐噪声，对如高斯噪声也有一定的抑制效果，同时保证图像边缘细节。</p>
+<p>对图像进行去噪后，通常采用均方根误差RMSE(Root Mean Square Error)和峰值信噪比PSNR(Peak Signal to Noise Ratio)进行评价。RMSE值越小表明滤波后的图像与真实图像偏差越小，滤波效果越好。PSNR值越大，表明滤波后的图像与真实图像越相似，失真度低。其RMSE和PSNR计算公式如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/OAlNvqRD8otQ6WM.png" alt="Snipaste_2024-04-11_20-56-18.png"></p>
+<p><img src="https://s2.loli.net/2024/04/11/C5g9jAUTNmMS8GR.png" alt="Snipaste_2024-04-11_20-56-31.png"></p>
+<p>式中：<em>MAX</em>表示图像灰度值的最大值，取255，<em>M</em>、<em>N</em>表示图像大小。</p>
+<span id="more"></span>
+
+<p>待处理的图像由两张，分别是有物料图像和无物料的背景图像：</p>
+<p><img src="https://s2.loli.net/2024/04/11/mhKEJZvIxQHeXld.png" alt="Snipaste_2024-04-11_21-05-20.png"></p>
+<p><img src="https://s2.loli.net/2024/04/11/cuUMOxz3ptKHPNZ.png" alt="Snipaste_2024-04-11_21-05-07.png"></p>
+<p>处理结果如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/IhbouaLOc2KlWRD.png" alt="Snipaste_2024-04-11_21-12-19.png"></p>
+<h3 id="均值滤波"><a href="#均值滤波" class="headerlink" title="均值滤波"></a>均值滤波</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">clc </span><br><span class="line">clear all;</span><br><span class="line">close all;</span><br><span class="line">High = imread(<span class="string">&#x27;C:\Users\雷子\Desktop\桌面文件\图像校正复原\2020_8_20_9_23_28_703_L.bmp&#x27;</span>);</span><br><span class="line"><span class="comment">% High = imread(&#x27;C:\Users\雷子\Desktop\图像校正复原\2020_8_20_11_18_41_290_H.bmp&#x27;);</span></span><br><span class="line"><span class="built_in">figure</span>,imshow(High);</span><br><span class="line"><span class="comment">% plot(High(:,500));</span></span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">%均值滤波</span></span><br><span class="line">J=High;</span><br><span class="line">K1=filter2(fspecial(<span class="string">&#x27;average&#x27;</span>,<span class="number">3</span>),J);<span class="comment">%进行3×3的均值滤波</span></span><br><span class="line">K2=filter2(fspecial(<span class="string">&#x27;average&#x27;</span>,<span class="number">5</span>),J);<span class="comment">%进行5×5的均值滤波</span></span><br><span class="line">K3=filter2(fspecial(<span class="string">&#x27;average&#x27;</span>,<span class="number">7</span>),J);<span class="comment">%进行5×5的均值滤波</span></span><br><span class="line"><span class="built_in">figure</span>,imshow(K1,[]);</span><br><span class="line">title(<span class="string">&#x27;3×3模板均值滤波&#x27;</span>);</span><br><span class="line"><span class="built_in">figure</span>,imshow(K2,[]);</span><br><span class="line">title(<span class="string">&#x27;5×5模板均值滤波&#x27;</span>);</span><br><span class="line"><span class="built_in">figure</span>,imshow(K3,[]);</span><br><span class="line">title(<span class="string">&#x27;7×7模板均值滤波&#x27;</span>);</span><br><span class="line">K4 = double(High);</span><br><span class="line"><span class="built_in">plot</span>(K4(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(K1(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(K2(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(K3(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="comment">%计算评价参数均方根误差RMSE</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>= <span class="number">1</span>:<span class="number">1000</span></span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:<span class="number">1088</span></span><br><span class="line">        S(<span class="built_in">i</span>,<span class="built_in">j</span>) =double((K1(<span class="built_in">i</span>,<span class="built_in">j</span>)-double(High(<span class="built_in">i</span>,<span class="built_in">j</span>)))^<span class="number">2</span>);  <span class="comment">%更改k1\k2\k2\k3</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">RSME  =( (sum(sum(S))/(<span class="number">1000</span>*<span class="number">1088</span>)))^(<span class="number">1</span>/<span class="number">2</span>);</span><br><span class="line"><span class="comment">%峰值信噪比PSNR</span></span><br><span class="line">PSNR = <span class="number">10</span>*<span class="built_in">log10</span>(<span class="number">255</span>^<span class="number">2</span>/RSME);</span><br></pre></td></tr></table></figure>
+
+<p>均值滤波中3×3模版最好，有物料图像，滤波后像素数值变化如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/KYvd8ypukSjPTDB.png" alt="Snipaste_2024-04-11_21-15-13.png"></p>
+<p>无物料图像，滤波后像素数值变化如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/kLAYOnjgZSTirJN.png" alt="Snipaste_2024-04-11_21-18-02.png"></p>
+<h3 id="中值滤波"><a href="#中值滤波" class="headerlink" title="中值滤波"></a>中值滤波</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">clc </span><br><span class="line">clear all;</span><br><span class="line">close all;</span><br><span class="line">High = imread(<span class="string">&#x27;C:\Users\雷子\Desktop\桌面文件\图像校正复原\2020_8_20_9_23_30_357_L.bmp&#x27;</span>);</span><br><span class="line"><span class="comment">% High = imread(&#x27;C:\Users\雷子\Desktop\图像校正复原\2020_8_20_11_18_41_290_H.bmp&#x27;);</span></span><br><span class="line"><span class="built_in">figure</span>,imshow(High);</span><br><span class="line"><span class="comment">% plot(High(:,500));</span></span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">%均值滤波</span></span><br><span class="line">J=High;</span><br><span class="line"><span class="comment">%中值滤波</span></span><br><span class="line">K5=medfilt2(J,[<span class="number">3</span> <span class="number">3</span>]);<span class="comment">%进行3×3的中值滤波</span></span><br><span class="line">K6=medfilt2(J,[<span class="number">5</span> <span class="number">5</span>]);<span class="comment">%进行5×5的中值滤波</span></span><br><span class="line">K7=medfilt2(J,[<span class="number">7</span> <span class="number">7</span>]);<span class="comment">%进行5×5的中值滤波</span></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>);</span><br><span class="line">imshow(K5);</span><br><span class="line">title(<span class="string">&#x27;3×3模板中值滤波&#x27;</span>);</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">imshow(K6);</span><br><span class="line">title(<span class="string">&#x27;5×5模板中值滤波&#x27;</span>);</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">4</span>);</span><br><span class="line">imshow(K7);</span><br><span class="line">title(<span class="string">&#x27;7×7模板中值滤波&#x27;</span>); </span><br><span class="line"><span class="built_in">plot</span>(High(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(K5(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(K6(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(K7(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="comment">%计算评价参数均方根误差RMSE</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>= <span class="number">1</span>:<span class="number">1000</span></span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:<span class="number">1088</span></span><br><span class="line">        S(<span class="built_in">i</span>,<span class="built_in">j</span>) =double((K5(<span class="built_in">i</span>,<span class="built_in">j</span>)-double(High(<span class="built_in">i</span>,<span class="built_in">j</span>)))^<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">RSME  =( (sum(sum(S))/(<span class="number">1000</span>*<span class="number">1088</span>)))^(<span class="number">1</span>/<span class="number">2</span>);</span><br><span class="line"><span class="comment">%峰值信噪比PSNR</span></span><br><span class="line">PSNR = <span class="number">10</span>*<span class="built_in">log10</span>(<span class="number">255</span>^<span class="number">2</span>/RSME);</span><br></pre></td></tr></table></figure>
+
+<p>中值滤波中3×3模版最好，有物料图像，滤波后像素数值变化如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/2emCGEaVzTnUjbK.png" alt="Snipaste_2024-04-11_21-38-40.png"></p>
+<p>无物料图像，滤波后像素数值变化如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/AdryKj1NhefPsa8.png" alt="Snipaste_2024-04-11_21-37-30.png"></p>
+<h3 id="自适应中值滤波："><a href="#自适应中值滤波：" class="headerlink" title="自适应中值滤波："></a>自适应中值滤波：</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">clc </span><br><span class="line">clear all;</span><br><span class="line">close all;</span><br><span class="line">High = imread(<span class="string">&#x27;C:\Users\雷子\Desktop\桌面文件\图像校正复原\2020_8_20_9_23_28_703_L.bmp&#x27;</span>);</span><br><span class="line"><span class="comment">% High = imread(&#x27;C:\Users\雷子\Desktop\图像校正复原\2020_8_20_11_18_41_290_H.bmp&#x27;);</span></span><br><span class="line"><span class="built_in">figure</span>,imshow(High);</span><br><span class="line">I_noise = High;</span><br><span class="line">[Im,In]=<span class="built_in">size</span>(I_noise);</span><br><span class="line">nmin = <span class="number">3</span>;</span><br><span class="line">nmax = <span class="number">7</span>;</span><br><span class="line">I_out = I_noise;</span><br><span class="line"><span class="comment">% 边界扩充</span></span><br><span class="line">I_ex = [<span class="built_in">zeros</span>((nmax<span class="number">-1</span>)/<span class="number">2</span>,In+(nmax<span class="number">-1</span>));<span class="built_in">zeros</span>(Im,(nmax<span class="number">-1</span>)/<span class="number">2</span>),I_noise,<span class="built_in">zeros</span>(Im,(nmax<span class="number">-1</span>)/<span class="number">2</span>);<span class="built_in">zeros</span>((nmax<span class="number">-1</span>)/<span class="number">2</span>,In+(nmax<span class="number">-1</span>))];</span><br><span class="line"><span class="comment">%自适应中值滤波</span></span><br><span class="line"><span class="keyword">for</span> x =<span class="number">1</span>:Im</span><br><span class="line">    <span class="keyword">for</span> y = <span class="number">1</span>:In</span><br><span class="line">        <span class="keyword">for</span> n = nmin:<span class="number">2</span>:nmax</span><br><span class="line">            Sxy = I_ex(x+(nmax<span class="number">-1</span>)/<span class="number">2</span>-(n<span class="number">-1</span>)/<span class="number">2</span>:x+(nmax<span class="number">-1</span>)/<span class="number">2</span>+(n<span class="number">-1</span>)/<span class="number">2</span>,y+(nmax<span class="number">-1</span>)/<span class="number">2</span>-(n<span class="number">-1</span>)/<span class="number">2</span>:y+(nmax<span class="number">-1</span>)/<span class="number">2</span>+(n<span class="number">-1</span>)/<span class="number">2</span>);</span><br><span class="line">            Smin = <span class="built_in">min</span>(<span class="built_in">min</span>(Sxy));</span><br><span class="line">            Smax = <span class="built_in">max</span>(<span class="built_in">max</span>(Sxy));</span><br><span class="line">            Smed = median(median(Sxy));</span><br><span class="line">            <span class="keyword">if</span> Smed &gt; Smin &amp;&amp; Smed &lt; Smax                              </span><br><span class="line">                <span class="keyword">if</span> I_out(x,y) &lt;= Smin || I_out(x,y) &gt;= Smax                                     </span><br><span class="line">                    I_out(x,y) = Smed;                 </span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">break</span>             </span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span>     </span><br><span class="line">        I_out(x,y) = Smed;   </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="built_in">figure</span>,imshow(I_out);</span><br><span class="line"><span class="built_in">plot</span>(High(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(I_out(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="comment">%计算评价参数均方根误差RMSE</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>= <span class="number">1</span>:<span class="number">1000</span></span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:<span class="number">1088</span></span><br><span class="line">        S(<span class="built_in">i</span>,<span class="built_in">j</span>) =double((I_out(<span class="built_in">i</span>,<span class="built_in">j</span>)-double(High(<span class="built_in">i</span>,<span class="built_in">j</span>)))^<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">RSME  =( (sum(sum(S))/(<span class="number">1000</span>*<span class="number">1088</span>)))^(<span class="number">1</span>/<span class="number">2</span>);</span><br><span class="line"><span class="comment">%峰值信噪比PSNR</span></span><br><span class="line">PSNR = <span class="number">10</span>*<span class="built_in">log10</span>(<span class="number">255</span>^<span class="number">2</span>/RSME);</span><br></pre></td></tr></table></figure>
+
+<p>有物料图像，滤波后像素数值变化如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/f1W6LYaMS3uNOoV.png" alt="Snipaste_2024-04-11_21-50-55.png"></p>
+<p>无物料图像，滤波后像素数值变化如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/HOrKgvVswPeJCzp.png" alt="Snipaste_2024-04-11_21-52-11.png"></p>
+<h3 id="高斯滤波"><a href="#高斯滤波" class="headerlink" title="高斯滤波"></a>高斯滤波</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">clc </span><br><span class="line">clear all;</span><br><span class="line">close all;</span><br><span class="line">High = imread(<span class="string">&#x27;C:\Users\雷子\Desktop\桌面文件\图像校正复原\2020_8_20_9_23_26_941_L.bmp&#x27;</span>);</span><br><span class="line"><span class="comment">% High = imread(&#x27;C:\Users\雷子\Desktop\图像校正复原\2020_8_20_11_18_41_290_H.bmp&#x27;);</span></span><br><span class="line"><span class="built_in">figure</span>,imshow(High);</span><br><span class="line"><span class="comment">% plot(High(:,500));</span></span><br><span class="line">W = fspecial(<span class="string">&#x27;gaussian&#x27;</span>,[<span class="number">3</span>,<span class="number">3</span>],<span class="number">0.8</span>);            <span class="comment">%创建高斯滤波器</span></span><br><span class="line">K8= imfilter(High, W, <span class="string">&#x27;replicate&#x27;</span>);           <span class="comment">%对椒盐噪声进行高斯滤波</span></span><br><span class="line"><span class="built_in">plot</span>(High(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(K8(<span class="number">500</span>,:)), <span class="built_in">hold</span> on;</span><br><span class="line">subplot(<span class="number">121</span>),imshow(High);</span><br><span class="line">subplot(<span class="number">122</span>),imshow(K8);</span><br><span class="line"><span class="comment">%计算评价参数均方根误差RMSE</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>= <span class="number">1</span>:<span class="number">1000</span></span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:<span class="number">1088</span></span><br><span class="line">        S(<span class="built_in">i</span>,<span class="built_in">j</span>) =double((k8(<span class="built_in">i</span>,<span class="built_in">j</span>)-double(High(<span class="built_in">i</span>,<span class="built_in">j</span>)))^<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">RSME  =( (sum(sum(S))/(<span class="number">1000</span>*<span class="number">1088</span>)))^(<span class="number">1</span>/<span class="number">2</span>);</span><br><span class="line"><span class="comment">%峰值信噪比PSNR</span></span><br><span class="line">PSNR = <span class="number">10</span>*<span class="built_in">log10</span>(<span class="number">255</span>^<span class="number">2</span>/RSME);</span><br></pre></td></tr></table></figure>
+
+<p>高斯滤波中3×3模版，标准差0.8滤波效果最好，有物料图像，滤波后像素数值变化如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/8L9WDb34df6Iyhg.png" alt="Snipaste_2024-04-11_21-58-12.png"></p>
+<p>无物料图像，滤波后像素数值变化如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/XS8lBUud9bixQgJ.png" alt="Snipaste_2024-04-11_21-56-49.png"></p>
+<p>由表可知，高斯滤波的整体效果更好，当模板大小为3×3，方差为0.8时，RMSE和PSNR值均优于其他方法。</p>
+<p>高斯滤波后的图像：</p>
+<p><img src="https://s2.loli.net/2024/04/11/GKC5YO8Xr3J7dp6.png" alt="Snipaste_2024-04-11_22-00-47.png"></p>
+<p><img src="https://s2.loli.net/2024/04/11/gMzlQeyTbS5NoIF.png" alt="Snipaste_2024-04-11_21-59-59.png"></p>
+<p>对原图像采用高斯滤波并不会提高图像的均匀度，也即不会对产生的条纹缺陷起到削弱作用。如何提高图像的均匀度将在下一份文档中具体介绍。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Lei He 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MATLAB/" rel="tag"># MATLAB</a>
+              <a href="/tags/%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF/" rel="tag"># 双能X射线</a>
+              <a href="/tags/%E7%85%A4%E7%9F%B8%E7%9F%B3/" rel="tag"># 煤矸石</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/" rel="tag"># 图像去噪</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/08/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95/" rel="prev" title="煤矸双能X射线透射图像分割方法">
+                  <i class="fa fa-angle-left"></i> 煤矸双能X射线透射图像分割方法
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Lei He</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">15k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">14 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+
+
+
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("4/01/2024 10:00:00"); //修改为你的网站开始运行的时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒.";
+    }
+setInterval("createtime()",250);
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
