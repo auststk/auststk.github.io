@@ -21,20 +21,23 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":"ture","style":null},"fold":{"enable":"ture","height":500},"bookmark":{"enable":"ture","color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="人生到处知何似，应似飞鸿踏雪泥！">
+    <meta name="description" content="对图像特征提取之前，需要整理图像，同时，如果处理图像较多，该怎样批量处理呢？ 1 . u i g e t d i r ( ) 函数用以打开文件夹选择对话框， s e l p a t h &#x3D; u i g e t d i r 打开一个模态对话框，显示当前工作目录中的文件夹并返回用户从对话框中选择的路径。 s e l p a t h &#x3D; u i g e t d i r ( p a t">
 <meta property="og:type" content="article">
 <meta property="og:title" content="批量处理文件夹图像并提取纹理特征">
 <meta property="og:url" content="http://example.com/2024/04/18/%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E6%96%87%E4%BB%B6%E5%A4%B9%E5%9B%BE%E5%83%8F%E5%B9%B6%E6%8F%90%E5%8F%96%E7%BA%B9%E7%90%86%E7%89%B9%E5%BE%81/index.html">
 <meta property="og:site_name" content="Lei He">
-<meta property="og:description" content="人生到处知何似，应似飞鸿踏雪泥！">
+<meta property="og:description" content="对图像特征提取之前，需要整理图像，同时，如果处理图像较多，该怎样批量处理呢？ 1 . u i g e t d i r ( ) 函数用以打开文件夹选择对话框， s e l p a t h &#x3D; u i g e t d i r 打开一个模态对话框，显示当前工作目录中的文件夹并返回用户从对话框中选择的路径。 s e l p a t h &#x3D; u i g e t d i r ( p a t">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/04/18/Q7fpjagV2S1xICT.png">
+<meta property="og:image" content="https://s2.loli.net/2024/04/18/UpFBmICZHGPcrjq.png">
 <meta property="article:published_time" content="2024-04-18T12:19:31.000Z">
-<meta property="article:modified_time" content="2024-04-18T12:20:31.498Z">
+<meta property="article:modified_time" content="2024-04-18T12:46:19.597Z">
 <meta property="article:author" content="Lei He">
 <meta property="article:tag" content="MATLAB">
 <meta property="article:tag" content="图像处理">
 <meta property="article:tag" content="纹理特征">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/04/18/Q7fpjagV2S1xICT.png">
 
 
 <link rel="canonical" href="http://example.com/2024/04/18/%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E6%96%87%E4%BB%B6%E5%A4%B9%E5%9B%BE%E5%83%8F%E5%B9%B6%E6%8F%90%E5%8F%96%E7%BA%B9%E7%90%86%E7%89%B9%E5%BE%81/">
@@ -103,7 +106,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -116,6 +119,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-u-i-g-e-t-d-i-r-%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">1 . u i g e t d i r ( ) 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-c-d-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">2 . c d ( ) 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-d-i-r-%E5%91%BD%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">3 . d i r ( ) 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-s-t-r-u-c-t-2-c-e-l-l-%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">4 . s t r u c t 2 c e l l ( ) 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">**5.  ** 批量处理</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -206,7 +210,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-04-18 20:19:31 / 修改时间：20:20:31" itemprop="dateCreated datePublished" datetime="2024-04-18T20:19:31+08:00">2024-04-18</time>
+      <time title="创建时间：2024-04-18 20:19:31 / 修改时间：20:46:19" itemprop="dateCreated datePublished" datetime="2024-04-18T20:19:31+08:00">2024-04-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -240,14 +244,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>0</span>
+      <span>3.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -257,7 +261,32 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
+    <div class="post-body" itemprop="articleBody"><p>对图像特征提取之前，需要整理图像，同时，如果处理图像较多，该怎样批量处理呢？</p>
+<h3 id="1-u-i-g-e-t-d-i-r-函数"><a href="#1-u-i-g-e-t-d-i-r-函数" class="headerlink" title="1 . u i g e t d i r ( ) 函数"></a><strong>1 . u i g e t d i r ( )</strong> <strong>函数</strong></h3><p>用以打开文件夹选择对话框， s e l p a t h &#x3D; u i g e t d i r 打开一个模态对话框，显示当前工作目录中的文件夹并返回用户从对话框中选择的路径。 s e l p a t h &#x3D; u i g e t d i r ( p a t h ) 指定对话框打开时定位到的初始路径。如果 p a t h 为空或不是有效路径，对话框将在当前工作目录中打开。 s e l p a t h &#x3D; u i g e t d i r ( p a t h , t i t l e ) 指定对话框的标题。</p>
+<h3 id="2-c-d-命令"><a href="#2-c-d-命令" class="headerlink" title="2 . c d ( ) 命令"></a><strong>2 . c d ( )</strong> <strong>命令</strong></h3><p>c d 命令，最初接触到 c d 在 c m d 窗口，使用 c d 进入退出文件夹。 c d ( n e w F o l d e r ) ,进入文件夹当中。</p>
+<h3 id="3-d-i-r-命令"><a href="#3-d-i-r-命令" class="headerlink" title="3 . d i r ( ) 命令"></a><strong>3 . d i r ( )</strong> <strong>命令</strong></h3><p>d i r n a m e 列出与 n a m e 匹配的文件和文件夹。如果 n a m e 为文件夹， d i r 列出该文件夹的内容。使用绝对或相对路径名称指定 n a m e 。 n a m e 参数的文件名可以包含 * 通配符，路径名称可以包含 * 和 * * 通配符。与 * * 通配符相邻的字符必须为文件分隔符。</p>
+<span id="more"></span>
+
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">示例一：</span><br><span class="line"> mkdir myfolder <span class="comment">%新建文件夹</span></span><br><span class="line"> movefile myfile1.m myfolder <span class="comment">%在新建文件夹中创建m文件</span></span><br><span class="line"> movefile myfile2.m myfolder</span><br><span class="line"> movefile myfile3.m myfolder</span><br><span class="line"> dir myfolder <span class="comment">%列出 myfolder 中的文件。</span></span><br><span class="line"> cd myfolder</span><br><span class="line"> dir *my*.m <span class="comment">%列出myfolder中符合条件的文件</span></span><br><span class="line"> MyFolderInfo = dir(<span class="string">&#x27;myfolder&#x27;</span>) <span class="comment">%获取 myfolder 中文件的列表。MATLAB 以结构体数组形式返回</span></span><br><span class="line"> MyFolderInfo(<span class="number">3</span>).name <span class="comment">%创建结构体索引以访问特定项目</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">示例二：</span><br><span class="line"> mkdir myfolder1 <span class="comment">%新建文件夹</span></span><br><span class="line"> mkdir myfolder1/myfolder2</span><br><span class="line"> mkdir myfolder1/myfolder2/myfolder3</span><br><span class="line"> movefile myfile1.m myfolder1</span><br><span class="line"> movefile myfile2.m myfolder1/myfolder2</span><br><span class="line"> movefile myfile3.m myfolder1/myfolder2/myfolder3</span><br><span class="line"> cd myfolder1</span><br><span class="line"> dir **/*.m <span class="comment">%列出 myfolder1 中和 myfolder1 的子文件夹中扩展名为 .m 的所有文件。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-s-t-r-u-c-t-2-c-e-l-l-函数"><a href="#4-s-t-r-u-c-t-2-c-e-l-l-函数" class="headerlink" title="4 . s t r u c t 2 c e l l ( ) 函数"></a><strong>4 . s t r u c t 2 c e l l ( )</strong> <strong>函数</strong></h3><p>s t r u c t 2 c e l l &amp;&amp; c e l l 2 s t r u c t 是 M A T L A B 的两个内建函数：把结构体数组转换成元胞数 组 的 s t r u c t 2 c e l l <strong>，</strong> 把 元 胞 数 组 转 换 为 结 构 体 数 组 （ 或 者 叫 结 构 体 向 量 ） 的c e l l 2 s t r u c t 。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Ac1=&#123;<span class="string">&#x27;first&#x27;</span>;<span class="number">1</span>:<span class="number">3</span>&#125;;Ac2=&#123;<span class="string">&#x27;Second&#x27;</span>;[<span class="number">1</span>,<span class="number">2</span>;<span class="number">3</span>,<span class="number">4</span>]&#125;;</span><br><span class="line">&gt;&gt; Ac=[Ac1,Ac2] </span><br><span class="line">Ac = </span><br><span class="line"><span class="string">&#x27;first&#x27;</span> <span class="string">&#x27;Second&#x27;</span> </span><br><span class="line">[<span class="number">1</span>x3 double] [<span class="number">2</span>x2 double]</span><br><span class="line">&gt;&gt; <span class="built_in">size</span>(Ac)</span><br><span class="line"><span class="built_in">ans</span> = </span><br><span class="line"><span class="number">2</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>由下述代码可以看出， A c（ 2 , 1） 意思是取第二行第一列的元素， A c { 2 , 1 } 意思是取值:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;Ac(<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">ans</span> = </span><br><span class="line">[<span class="number">1</span>x3 double]</span><br><span class="line">&gt;&gt; Ac&#123;<span class="number">2</span>,<span class="number">1</span>&#125;</span><br><span class="line"><span class="built_in">ans</span> =</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br><span class="line">&gt;&gt; As1.f1=<span class="string">&#x27;first&#x27;</span> <span class="comment">%给类似于C、java里的属性赋值，对象任意</span></span><br><span class="line">As1 = </span><br><span class="line">f1: <span class="string">&#x27;first&#x27;</span></span><br><span class="line">&gt;&gt; As1.f2=<span class="number">1</span>:<span class="number">3</span></span><br><span class="line">As1 = </span><br><span class="line">f1: <span class="string">&#x27;first&#x27;</span></span><br><span class="line">f2: [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> &gt;&gt; As2.f1=<span class="string">&#x27;Second&#x27;</span>;As2.f2=[<span class="number">1</span>,<span class="number">2</span>;<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"> As2 = </span><br><span class="line"> f1: <span class="string">&#x27;Second&#x27;</span></span><br><span class="line"> f2: [<span class="number">2</span>x2 double]</span><br><span class="line"></span><br><span class="line"> &gt;&gt; As=[As1;As2]</span><br><span class="line"> As = </span><br><span class="line"> <span class="number">2</span>x1 struct array with fields:</span><br><span class="line"> f1</span><br><span class="line">f2</span><br><span class="line"></span><br><span class="line">&gt;&gt; <span class="built_in">size</span>(As)</span><br><span class="line"><span class="built_in">ans</span> =</span><br><span class="line"><span class="number">2</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">&gt;&gt; As(<span class="number">1</span>) <span class="comment">%取出第一个数组</span></span><br><span class="line"><span class="built_in">ans</span> = </span><br><span class="line">f1: <span class="string">&#x27;first&#x27;</span></span><br><span class="line">f2: [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">&gt;&gt; Bs=struct2cell(As) <span class="comment">%将结构体转化为元胞数组（元胞数组没有域）</span></span><br><span class="line">Bs = </span><br><span class="line"><span class="string">&#x27;first&#x27;</span> <span class="string">&#x27;Second&#x27;</span> </span><br><span class="line">[<span class="number">1</span>x3 double] [<span class="number">2</span>x2 double]</span><br><span class="line"></span><br><span class="line">&gt;&gt; Cs=cell2struct(Bs,&#123;<span class="string">&#x27;c1&#x27;</span>,<span class="string">&#x27;c2&#x27;</span>&#125;,<span class="number">1</span>) <span class="comment">%将元胞数组转化为结构体（有两个域值）1代表一维</span></span><br><span class="line">Cs = </span><br><span class="line"><span class="number">2</span>x1 struct array with fields:</span><br><span class="line">c1</span><br><span class="line">c2</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-批量处理"><a href="#5-批量处理" class="headerlink" title="**5.  ** 批量处理"></a>**5.  ** 批量处理</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"> clc</span><br><span class="line"> clear all</span><br><span class="line"> tic</span><br><span class="line"> srcDir=uigetdir(<span class="string">&#x27;Choose source directory.&#x27;</span>); <span class="comment">%获得选择的文件夹</span></span><br><span class="line"> cd(srcDir);<span class="comment">%进入到文件夹中</span></span><br><span class="line"> allnames=struct2cell(dir(<span class="string">&#x27;*.jpg&#x27;</span>)); <span class="comment">%只处理8位的JPG文件</span></span><br><span class="line"> [k,len]=<span class="built_in">size</span>(allnames); <span class="comment">%获得bmp文件的个数</span></span><br><span class="line"> <span class="keyword">for</span> ii=<span class="number">1</span>:len</span><br><span class="line"> <span class="comment">%逐次取出文件用大括号</span></span><br><span class="line"> &gt;&gt; As2.f1=<span class="string">&#x27;Second&#x27;</span>;As2.f2=[<span class="number">1</span>,<span class="number">2</span>;<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"> As2 = </span><br><span class="line"> f1: <span class="string">&#x27;Second&#x27;</span></span><br><span class="line"> f2: [<span class="number">2</span>x2 double]</span><br><span class="line"></span><br><span class="line"> &gt;&gt; As=[As1;As2]</span><br><span class="line"> As = </span><br><span class="line"> <span class="number">2</span>x1 struct array with fields:</span><br><span class="line"> f1</span><br><span class="line">f2</span><br><span class="line"></span><br><span class="line">&gt;&gt; <span class="built_in">size</span>(As)</span><br><span class="line"><span class="built_in">ans</span> =</span><br><span class="line"><span class="number">2</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line">&gt;&gt; As(<span class="number">1</span>) <span class="comment">%取出第一个数组</span></span><br><span class="line"><span class="built_in">ans</span> = </span><br><span class="line">f1: <span class="string">&#x27;first&#x27;</span></span><br><span class="line">f2: [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">&gt;&gt; Bs=struct2cell(As) <span class="comment">%将结构体转化为元胞数组（元胞数组没有域）</span></span><br><span class="line">Bs = </span><br><span class="line"><span class="string">&#x27;first&#x27;</span> <span class="string">&#x27;Second&#x27;</span> </span><br><span class="line">[<span class="number">1</span>x3 double] [<span class="number">2</span>x2 double]</span><br><span class="line"></span><br><span class="line">&gt;&gt; Cs=cell2struct(Bs,&#123;<span class="string">&#x27;c1&#x27;</span>,<span class="string">&#x27;c2&#x27;</span>&#125;,<span class="number">1</span>) <span class="comment">%将元胞数组转化为结构体（有两个域值）1代表一维</span></span><br><span class="line">Cs = </span><br><span class="line"><span class="number">2</span>x1 struct array with fields:</span><br><span class="line">c1</span><br><span class="line">c2</span><br><span class="line">name=allnames&#123;<span class="number">1</span>,ii&#125;;</span><br><span class="line">tu=imread(name); <span class="comment">%读取文件</span></span><br><span class="line"><span class="comment">%**************************************************************************</span></span><br><span class="line"><span class="comment">%然后在此处添加你的图像处理程序即可</span></span><br><span class="line"><span class="comment">%**************************************************************************</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">toc</span><br></pre></td></tr></table></figure>
+
+<p>在 m a t l a b 中测试一次，文件夹中有33张图像：</p>
+<p><img src="https://s2.loli.net/2024/04/18/Q7fpjagV2S1xICT.png" alt="Snipaste_2024-04-18_20-43-26.png"></p>
+<p>使用此程序运行提取纹理图像特征，花费 1 8秒 。</p>
+<p>提取特征参量如下：</p>
+<p><img src="https://s2.loli.net/2024/04/18/UpFBmICZHGPcrjq.png" alt="Snipaste_2024-04-18_20-43-41.png"></p>
+
     </div>
 
     
@@ -325,14 +354,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">39k</span>
+    <span title="站点总字数">43k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">36 分钟</span>
+    <span title="站点阅读时长">39 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
