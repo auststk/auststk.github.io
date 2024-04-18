@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":"ture","style":null},"fold":{"enable":"ture","height":500},"bookmark":{"enable":"ture","color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="针对图像多目标区域进行灰度提取纹理提取图像如图所示：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="煤矸多目标区域灰度特征及纹理特征提取">
+<meta property="og:url" content="http://example.com/2024/04/18/%E7%85%A4%E7%9F%B8%E5%A4%9A%E7%9B%AE%E6%A0%87%E5%8C%BA%E5%9F%9F%E7%81%B0%E5%BA%A6%E7%89%B9%E5%BE%81%E5%8F%8A%E7%BA%B9%E7%90%86%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/index.html">
+<meta property="og:site_name" content="Lei He">
+<meta property="og:description" content="针对图像多目标区域进行灰度提取纹理提取图像如图所示：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2024/04/18/GPAeDQxWf9lbXYS.png">
+<meta property="article:published_time" content="2024-04-18T07:56:21.000Z">
+<meta property="article:modified_time" content="2024-04-18T08:12:17.668Z">
+<meta property="article:author" content="Lei He">
+<meta property="article:tag" content="MATLAB">
+<meta property="article:tag" content="双能X射线">
+<meta property="article:tag" content="图像处理">
+<meta property="article:tag" content="灰度信息">
+<meta property="article:tag" content="纹理信息">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2024/04/18/GPAeDQxWf9lbXYS.png">
+
+
+<link rel="canonical" href="http://example.com/2024/04/18/%E7%85%A4%E7%9F%B8%E5%A4%9A%E7%9B%AE%E6%A0%87%E5%8C%BA%E5%9F%9F%E7%81%B0%E5%BA%A6%E7%89%B9%E5%BE%81%E5%8F%8A%E7%BA%B9%E7%90%86%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/18/%E7%85%A4%E7%9F%B8%E5%A4%9A%E7%9B%AE%E6%A0%87%E5%8C%BA%E5%9F%9F%E7%81%B0%E5%BA%A6%E7%89%B9%E5%BE%81%E5%8F%8A%E7%BA%B9%E7%90%86%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/","path":"2024/04/18/煤矸多目标区域灰度特征及纹理特征提取/","title":"煤矸多目标区域灰度特征及纹理特征提取"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>煤矸多目标区域灰度特征及纹理特征提取 | Lei He</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Lei He</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于我</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-schedule"><a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lei He"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Lei He</p>
+  <div class="site-description" itemprop="description">人生到处知何似，应似飞鸿踏雪泥！</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/auststk/auststk.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;auststk&#x2F;auststk.github.io" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:helei_jxzl@126.com" title="E-Mail → mailto:helei_jxzl@126.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/18/%E7%85%A4%E7%9F%B8%E5%A4%9A%E7%9B%AE%E6%A0%87%E5%8C%BA%E5%9F%9F%E7%81%B0%E5%BA%A6%E7%89%B9%E5%BE%81%E5%8F%8A%E7%BA%B9%E7%90%86%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lei He">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lei He">
+      <meta itemprop="description" content="人生到处知何似，应似飞鸿踏雪泥！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="煤矸多目标区域灰度特征及纹理特征提取 | Lei He">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          煤矸多目标区域灰度特征及纹理特征提取
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-04-18 15:56:21 / 修改时间：16:12:17" itemprop="dateCreated datePublished" datetime="2024-04-18T15:56:21+08:00">2024-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/" itemprop="url" rel="index"><span itemprop="name">MATLAB</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/" itemprop="url" rel="index"><span itemprop="name">特征提取</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96/%E7%BA%B9%E7%90%86%E7%89%B9%E5%BE%81/" itemprop="url" rel="index"><span itemprop="name">纹理特征</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>针对图像多目标区域进行灰度提取纹理提取图像如图所示：</p>
+<p><img src="https://s2.loli.net/2024/04/18/GPAeDQxWf9lbXYS.png" alt="Snipaste_2024-04-18_16-08-22.png"></p>
+<span id="more"></span>
+
+<p>算法设计未采用函数调用可直接运行：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br></pre></td><td class="code"><pre><span class="line">clear all,clc;</span><br><span class="line"><span class="comment">%读录图像</span></span><br><span class="line">im = imread( <span class="string">&#x27;/Users/yons/Desktop/目标区域分别提取并统计灰度值/gan.png&#x27;</span> );   </span><br><span class="line"><span class="built_in">figure</span>;</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>);imshow(im);title(<span class="string">&#x27;原始图像&#x27;</span>);</span><br><span class="line"> <span class="comment">%转灰度图像</span></span><br><span class="line">im=rgb2gray(im);                                             	 </span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>);imshow(im);title(<span class="string">&#x27;灰度图像&#x27;</span>);</span><br><span class="line"><span class="comment">%对灰度图像进行邻域3x3二维中值滤波</span></span><br><span class="line">im1=medfilt2(im,[<span class="number">3</span> <span class="number">3</span>]);                                          </span><br><span class="line"><span class="built_in">figure</span>;subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>);imshow(im1);title(<span class="string">&#x27;3x3-中值滤波&#x27;</span>);</span><br><span class="line"><span class="comment">%寻找灰度图像最佳阈值，&quot;Otsu&quot;法阈值分割图像，并进行二值化处理</span></span><br><span class="line">level=graythresh(im1);                                           </span><br><span class="line">im2=im2bw(im1,level);                                            </span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>);imshow(im2);title(<span class="string">&#x27;二值化&#x27;</span>);</span><br><span class="line">im3 = edge(im2,<span class="string">&#x27;Canny&#x27;</span>);</span><br><span class="line"><span class="built_in">figure</span>,imshow(im3);</span><br><span class="line"><span class="comment">%标记连通区域</span></span><br><span class="line">im4 = bwlabel(im3);</span><br><span class="line">q = <span class="built_in">max</span>(<span class="built_in">max</span>(im4));</span><br><span class="line">[r,c] = <span class="built_in">size</span>(im4);</span><br><span class="line"><span class="comment">%构建元胞数组</span></span><br><span class="line">A = cell(<span class="number">1</span>,q+<span class="number">1</span>);</span><br><span class="line">A&#123;<span class="number">1</span>,<span class="number">1</span>&#125; = im4;</span><br><span class="line"><span class="comment">%分离连通区域</span></span><br><span class="line"><span class="keyword">for</span> p = <span class="number">1</span>:q</span><br><span class="line">    im4 = bwlabel(im3);</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:r</span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:c</span><br><span class="line">           <span class="keyword">if</span>  im4(<span class="built_in">i</span>,<span class="built_in">j</span>) ~= p</span><br><span class="line">                 im4(<span class="built_in">i</span>,<span class="built_in">j</span>) = <span class="number">0</span>;</span><br><span class="line">           <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    A&#123;<span class="number">1</span>,p&#125; = im4;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">%循环输出连通区域</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:q</span><br><span class="line">    <span class="built_in">figure</span>,imshow(A&#123;<span class="number">1</span>,<span class="built_in">i</span>&#125;);</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">%多目标连通区域灰度值信息提取</span></span><br><span class="line">k = cell(<span class="number">1</span>,q);</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:q</span><br><span class="line">	k&#123;<span class="number">1</span>,<span class="built_in">i</span>&#125; = <span class="built_in">ones</span>(r,c);</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> p = <span class="number">1</span>:q</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:r</span><br><span class="line">    	<span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:c</span><br><span class="line">       </span><br><span class="line">       		<span class="keyword">if</span> sum(A&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="number">1</span>:<span class="built_in">j</span>)) == <span class="number">0</span></span><br><span class="line">            	k&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="number">1</span>:<span class="built_in">j</span>) = <span class="number">0</span>;</span><br><span class="line">       		<span class="keyword">end</span>  </span><br><span class="line">           </span><br><span class="line">       		<span class="keyword">if</span> sum(A&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>:c)) == <span class="number">0</span></span><br><span class="line">           		 k&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>:c) = <span class="number">0</span>;</span><br><span class="line">       		<span class="keyword">end</span></span><br><span class="line">       </span><br><span class="line">       		<span class="keyword">if</span> A&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>) == <span class="number">1</span></span><br><span class="line">          		 k&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>) = <span class="number">0</span>;</span><br><span class="line">      		<span class="keyword">end</span></span><br><span class="line">    	<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%T为提取目标区域灰度矩阵</span></span><br><span class="line">T = cell(<span class="number">1</span>,q);</span><br><span class="line"><span class="keyword">for</span> p = <span class="number">1</span>:q</span><br><span class="line">	T&#123;<span class="number">1</span>,p&#125; = <span class="built_in">zeros</span>(r,c);</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> p = <span class="number">1</span>:q</span><br><span class="line">	<span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:r</span><br><span class="line">		T&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,:) = double(im(<span class="built_in">i</span>,:)) * <span class="built_in">diag</span>(k&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,:));</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%%</span></span><br><span class="line">gray = cell(<span class="number">1</span>,q);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> p = <span class="number">1</span>:q</span><br><span class="line">	gray&#123;<span class="number">1</span>,p&#125; = T&#123;<span class="number">1</span>,p&#125;;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> p = <span class="number">1</span>:q</span><br><span class="line">    [M,N] = <span class="built_in">size</span>(T&#123;<span class="number">1</span>,p&#125;);</span><br><span class="line">  <span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:M</span><br><span class="line">	   <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:N</span><br><span class="line">		    <span class="keyword">for</span> n = <span class="number">1</span>:<span class="number">256</span>/<span class="number">16</span></span><br><span class="line">			     <span class="keyword">if</span> (n<span class="number">-1</span>)*<span class="number">16</span>&lt;=gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>)&amp;&amp;gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>)&lt;=(n<span class="number">-1</span>)*<span class="number">16</span>+<span class="number">15</span></span><br><span class="line">				      gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>) = n<span class="number">-1</span>;</span><br><span class="line">			     <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="comment">%-----------------------------------------------------------</span></span><br><span class="line">  <span class="comment">% 计算0，45，90，135方向上灰度共生矩阵，距离为1</span></span><br><span class="line">  <span class="comment">%-----------------------------------------------------------</span></span><br><span class="line">  Q = <span class="built_in">zeros</span>(<span class="number">16</span>,<span class="number">16</span>,<span class="number">4</span>);</span><br><span class="line">  <span class="keyword">for</span> m = <span class="number">1</span>:<span class="number">16</span></span><br><span class="line">	 <span class="keyword">for</span> n = <span class="number">1</span>:<span class="number">16</span></span><br><span class="line">		 <span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:M</span><br><span class="line">			 <span class="keyword">for</span> <span class="built_in">j</span>= <span class="number">1</span>:N</span><br><span class="line">				  <span class="keyword">if</span> <span class="built_in">j</span> &lt; N &amp;&amp; gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>) == m - <span class="number">1</span> &amp;&amp; gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>+<span class="number">1</span>) == n - <span class="number">1</span></span><br><span class="line">					   Q(m,n,<span class="number">1</span>) = Q(m,n,<span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">					   Q(m,n,<span class="number">1</span>) = Q(m,n,<span class="number">1</span>);</span><br><span class="line">				  <span class="keyword">end</span></span><br><span class="line">				  <span class="keyword">if</span> <span class="built_in">i</span> &gt; <span class="number">1</span> &amp;&amp; <span class="built_in">j</span> &lt; N &amp;&amp; gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>) == m - <span class="number">1</span> &amp;&amp; gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span><span class="number">-1</span>,<span class="built_in">j</span>+<span class="number">1</span>) == n - <span class="number">1</span></span><br><span class="line">					   Q(m,n,<span class="number">2</span>) = Q(m,n,<span class="number">2</span>) + <span class="number">1</span>;</span><br><span class="line">					   Q(m,n,<span class="number">2</span>) = Q(m,n,<span class="number">2</span>);</span><br><span class="line">				  <span class="keyword">end</span></span><br><span class="line">				  <span class="keyword">if</span> <span class="built_in">i</span> &lt; M &amp;&amp; gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>) == m - <span class="number">1</span> &amp;&amp; gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>+<span class="number">1</span>,<span class="built_in">j</span>) == n - <span class="number">1</span></span><br><span class="line">					 Q(m,n,<span class="number">3</span>) = Q(m,n,<span class="number">3</span>) + <span class="number">1</span>;</span><br><span class="line">					 Q(m,n,<span class="number">3</span>) = Q(m,n,<span class="number">3</span>);</span><br><span class="line">				  <span class="keyword">end</span></span><br><span class="line">				  <span class="keyword">if</span> <span class="built_in">i</span> &lt; M &amp;&amp; <span class="built_in">j</span> &lt; N &amp;&amp; gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>,<span class="built_in">j</span>) == m - <span class="number">1</span> &amp;&amp; gray&#123;<span class="number">1</span>,p&#125;(<span class="built_in">i</span>+<span class="number">1</span>,<span class="built_in">j</span>+<span class="number">1</span>) == n - <span class="number">1</span></span><br><span class="line">					 Q(m,n,<span class="number">4</span>) = Q(m,n,<span class="number">4</span>) + <span class="number">1</span>;</span><br><span class="line">					 Q(m,n,<span class="number">4</span>) = Q(m,n,<span class="number">4</span>);</span><br><span class="line">				  <span class="keyword">end</span></span><br><span class="line">			 <span class="keyword">end</span></span><br><span class="line">		 <span class="keyword">end</span></span><br><span class="line">		    <span class="keyword">if</span> m == n</span><br><span class="line">		       Q(m,n,:) = Q(m,n,:)*<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="comment">%disp(&#x27;0度时的灰度共生矩阵：&#x27;);</span></span><br><span class="line">  <span class="comment">%disp(Q(:,:,1));</span></span><br><span class="line">  <span class="comment">%disp(&#x27;45度时的灰度共生矩阵：&#x27;);</span></span><br><span class="line">  <span class="comment">%disp(Q(:,:,2));</span></span><br><span class="line">  <span class="comment">%disp(&#x27;90度时的灰度共生矩阵：&#x27;);</span></span><br><span class="line">  <span class="comment">%disp(Q(:,:,3));</span></span><br><span class="line">  <span class="comment">%disp(&#x27;135度时的灰度共生矩阵：&#x27;);</span></span><br><span class="line">  <span class="comment">%disp(Q(:,:,4));</span></span><br><span class="line">  <span class="comment">%-----------------------------------------------------------</span></span><br><span class="line">  <span class="comment">% 灰度共生矩阵归一化处理</span></span><br><span class="line">  <span class="comment">%-----------------------------------------------------------</span></span><br><span class="line">  <span class="keyword">for</span> n = <span class="number">1</span>:<span class="number">4</span></span><br><span class="line">	   Q(:,:,n) = Q(:,:,n)/sum(sum(Q(:,:,n)));</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  [kk,ll,mm] = <span class="built_in">size</span>(Q);</span><br><span class="line"></span><br><span class="line">  <span class="comment">%-----------------------------------------------------------</span></span><br><span class="line">  <span class="comment">%对共生矩阵计算能量、熵、惯性矩、相关4个纹理参数</span></span><br><span class="line">  <span class="comment">%-----------------------------------------------------------</span></span><br><span class="line">  H = <span class="built_in">zeros</span>(<span class="number">1</span>,mm);</span><br><span class="line">  I = H;</span><br><span class="line">  Ux = H;      </span><br><span class="line">  Uy = H;</span><br><span class="line">  deltaX= H;  </span><br><span class="line">  deltaY = H;</span><br><span class="line">  C = H;</span><br><span class="line">  <span class="keyword">for</span> n = <span class="number">1</span>:mm</span><br><span class="line">     E(n) = sum(sum(Q(:,:,n).^<span class="number">2</span>)); <span class="comment">%能量</span></span><br><span class="line">      <span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:kk</span><br><span class="line">          <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:ll</span><br><span class="line">              <span class="keyword">if</span> Q(<span class="built_in">i</span>,<span class="built_in">j</span>,n)~=<span class="number">0</span></span><br><span class="line">                  H(n) = -Q(<span class="built_in">i</span>,<span class="built_in">j</span>,n)*<span class="built_in">log</span>(Q(<span class="built_in">i</span>,<span class="built_in">j</span>,n))+H(n); <span class="comment">%熵</span></span><br><span class="line">              <span class="keyword">end</span></span><br><span class="line">              I(n) = (<span class="built_in">i</span>-<span class="built_in">j</span>)^<span class="number">2</span>*Q(<span class="built_in">i</span>,<span class="built_in">j</span>,n)+I(n);  <span class="comment">%惯性矩</span></span><br><span class="line"></span><br><span class="line">              Ux(n) = <span class="built_in">i</span>*Q(<span class="built_in">i</span>,<span class="built_in">j</span>,n)+Ux(n); <span class="comment">%相关性中μx</span></span><br><span class="line">              Uy(n) = <span class="built_in">j</span>*Q(<span class="built_in">i</span>,<span class="built_in">j</span>,n)+Uy(n); <span class="comment">%相关性中μy</span></span><br><span class="line">          <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">for</span> n = <span class="number">1</span>:mm</span><br><span class="line">      <span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:kk</span><br><span class="line">          <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:ll</span><br><span class="line">              deltaX(n) = (<span class="built_in">i</span>-Ux(n))^<span class="number">2</span>*Q(<span class="built_in">i</span>,<span class="built_in">j</span>,n)+deltaX(n); <span class="comment">%相关性中σx</span></span><br><span class="line">              deltaY(n) = (<span class="built_in">j</span>-Uy(n))^<span class="number">2</span>*Q(<span class="built_in">i</span>,<span class="built_in">j</span>,n)+deltaY(n); <span class="comment">%相关性中σy</span></span><br><span class="line">              C(n) = <span class="built_in">i</span>*<span class="built_in">j</span>*Q(<span class="built_in">i</span>,<span class="built_in">j</span>,n)+C(n);</span><br><span class="line">          <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      C(n) = (C(n)-Ux(n)*Uy(n))/deltaX(n)/deltaY(n); <span class="comment">%相关性</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">%--------------------------------------------------------------------------</span></span><br><span class="line">  <span class="comment">%求能量、熵、惯性矩、相关的均值和标准差作为最终8维纹理特征</span></span><br><span class="line">  <span class="comment">%--------------------------------------------------------------------------</span></span><br><span class="line">  a1 = <span class="built_in">mean</span>(E);</span><br><span class="line">  b1 = <span class="built_in">sqrt</span>(cov(E));</span><br><span class="line"></span><br><span class="line">  a2 = <span class="built_in">mean</span>(H);</span><br><span class="line">  b2 = <span class="built_in">sqrt</span>(cov(H));</span><br><span class="line"></span><br><span class="line">  a3 = <span class="built_in">mean</span>(I);</span><br><span class="line">  b3 = <span class="built_in">sqrt</span>(cov(I));</span><br><span class="line"></span><br><span class="line">  a4 = <span class="built_in">mean</span>(C);</span><br><span class="line">  b4 = <span class="built_in">sqrt</span>(cov(C));</span><br><span class="line"></span><br><span class="line">  <span class="comment">%sprintf(&#x27;0,45,90,135方向上的能量依次为： %f, %f, %f, %f&#x27;,E(1),E(2),E(3),E(4))  % 输出数据;</span></span><br><span class="line">  <span class="comment">%sprintf(&#x27;0,45,90,135方向上的熵依次为： %f, %f, %f, %f&#x27;,H(1),H(2),H(3),H(4))  % 输出数据;</span></span><br><span class="line">  <span class="comment">%sprintf(&#x27;0,45,90,135方向上的惯性矩依次为： %f, %f, %f, %f&#x27;,I(1),I(2),I(3),I(4))  % 输出数据;</span></span><br><span class="line">  <span class="comment">%sprintf(&#x27;0,45,90,135方向上的相关性依次为： %f, %f, %f, %f&#x27;,C(1),C(2),C(3),C(4))  % 输出数据;</span></span><br><span class="line">  wen_li&#123;<span class="number">1</span>,p&#125; = [<span class="number">0</span>,<span class="number">45</span>,<span class="number">90</span>,<span class="number">135</span>;a1,a2,a3,a4];</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%求取目标区域灰度值平均值</span></span><br><span class="line">MEAN = cell (<span class="number">1</span>,q);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> p = <span class="number">1</span>:q </span><br><span class="line">    m = nnz(T&#123;<span class="number">1</span>,p&#125;);</span><br><span class="line">    MEAN&#123;<span class="number">1</span>,p&#125; = sum(sum(T&#123;<span class="number">1</span>,p&#125;))/m;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>运行代码输出图像单目标灰度均值以及纹理特征，可从元胞数组中查看参量。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="Lei He 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MATLAB/" rel="tag"># MATLAB</a>
+              <a href="/tags/%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF/" rel="tag"># 双能X射线</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" rel="tag"># 图像处理</a>
+              <a href="/tags/%E7%81%B0%E5%BA%A6%E4%BF%A1%E6%81%AF/" rel="tag"># 灰度信息</a>
+              <a href="/tags/%E7%BA%B9%E7%90%86%E4%BF%A1%E6%81%AF/" rel="tag"># 纹理信息</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/16/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E5%9B%BE%E5%83%8F%E5%A4%9A%E7%9B%AE%E6%A0%87%E5%8C%BA%E5%9F%9F%E7%81%B0%E5%BA%A6%E5%9D%87%E5%80%BC%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95%E4%B8%8EMATLAB%E5%AE%9E%E7%8E%B0/" rel="prev" title="煤矸双能X射线图像多目标区域灰度均值提取算法与MATLAB实现">
+                  <i class="fa fa-angle-left"></i> 煤矸双能X射线图像多目标区域灰度均值提取算法与MATLAB实现
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Lei He</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">39k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">36 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+
+
+
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("4/01/2024 10:00:00"); //修改为你的网站开始运行的时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒.";
+    }
+setInterval("createtime()",250);
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+  
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
