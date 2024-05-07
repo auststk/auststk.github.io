@@ -126,18 +126,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -162,6 +162,229 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/09/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lei He">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lei He">
+      <meta itemprop="description" content="人生到处知何似，应似飞鸿踏雪泥！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Lei He">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/09/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/" class="post-title-link" itemprop="url">煤矸双能X射线透射图像去噪</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-09 09:53:13" itemprop="dateCreated datePublished" datetime="2024-04-09T09:53:13+08:00">2024-04-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-04-11 22:04:14" itemprop="dateModified" datetime="2024-04-11T22:04:14+08:00">2024-04-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/" itemprop="url" rel="index"><span itemprop="name">MATLAB</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/" itemprop="url" rel="index"><span itemprop="name">图像去噪</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>X射线成像系统噪声可分为三种类型：本底噪声、随机噪声和孤立噪声。</p>
+<p>分别采用均值滤波、中值滤波、自适应中值滤波和高斯滤波对图像进行去噪处理。均值滤波中   常用正方形滤波模板一般有3×3、5×5和7×7，使用均值滤波会将煤矸的成像边界变得模糊，原因是邻域内所有像素点在均值中所占的权值都是1&#x2F;9，采用均值滤波可有效去除图像中的高频噪声。中值滤波相对均值滤波能够保留图像的边缘细节，对某些随机噪声具有非常理想的降噪能力，并且可以有效的去处成像时的坏点。高斯滤波相对均值滤波对图像的模糊程度更小，能够保留整体细节。自适应中值滤波基于传统中值滤波改进，可去除强度较高的椒盐噪声，对如高斯噪声也有一定的抑制效果，同时保证图像边缘细节。</p>
+<p>对图像进行去噪后，通常采用均方根误差RMSE(Root Mean Square Error)和峰值信噪比PSNR(Peak Signal to Noise Ratio)进行评价。RMSE值越小表明滤波后的图像与真实图像偏差越小，滤波效果越好。PSNR值越大，表明滤波后的图像与真实图像越相似，失真度低。其RMSE和PSNR计算公式如下：</p>
+<p><img src="https://s2.loli.net/2024/04/11/OAlNvqRD8otQ6WM.png" alt="Snipaste_2024-04-11_20-56-18.png"></p>
+<p><img src="https://s2.loli.net/2024/04/11/C5g9jAUTNmMS8GR.png" alt="Snipaste_2024-04-11_20-56-31.png"></p>
+<p>式中：<em>MAX</em>表示图像灰度值的最大值，取255，<em>M</em>、<em>N</em>表示图像大小。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/04/09/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/08/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lei He">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lei He">
+      <meta itemprop="description" content="人生到处知何似，应似飞鸿踏雪泥！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Lei He">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/08/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">煤矸双能X射线透射图像分割方法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-04-08 19:29:55 / 修改时间：21:21:43" itemprop="dateCreated datePublished" datetime="2024-04-08T19:29:55+08:00">2024-04-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/" itemprop="url" rel="index"><span itemprop="name">MATLAB</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MATLAB/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" itemprop="url" rel="index"><span itemprop="name">图像分割</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>​	煤矸双能X射线透射图像经过去噪校正后一般背景比较单一均匀，采用阈值法即可有效分割出前景目标。待分割图像如下图所示：</p>
+<p><img src="https://s2.loli.net/2024/04/08/LmzOHU7A4JwisCu.png" alt="Snipaste_2024-04-08_20-11-34.png"></p>
+<p>​	上图成像特点体现为明暗不均，类似于可见光成像的光照不均匀。煤密度小成像亮，贴近背景；矸石密度大成像暗，较好分割。煤矸厚度越大成像也越暗，因此阈值的选择尤为关键。既要保障分割全部目标，又要保障分割出全部的目标区域。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/04/08/%E7%85%A4%E7%9F%B8%E5%8F%8C%E8%83%BDX%E5%B0%84%E7%BA%BF%E9%80%8F%E5%B0%84%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -300,14 +523,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">42k</span>
+    <span title="站点总字数">48k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">38 分钟</span>
+    <span title="站点阅读时长">43 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">
